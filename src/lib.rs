@@ -17,16 +17,6 @@ impl<'a> TransportStream<'a> {
     }
 }
 
-#[derive(Debug)]
-pub struct Parts<T> {
-    /// The socket
-    pub socket: u32,
-    /// The buffer
-    pub buffer: T,
-
-    _priv: (),
-}
-
 // You might ask yourself why this struct is necessary:
 // the libpnet packet struct contains slice references that cannot be safely passed across threads.
 pub struct ToPacket<T> {
