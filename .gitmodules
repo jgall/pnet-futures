@@ -1,4 +1,0 @@
-[submodule "libpnet"]
-	path = libpnet
-	branch = optional_sys_calls
-	url = https://github.com/jgall/libpnet
