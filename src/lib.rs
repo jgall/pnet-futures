@@ -79,11 +79,6 @@ impl<'a, T: 'a> Stream for TransportStream<'a, T> {
             None => Ok(Async::NotReady),
         }
     }
-    // fn poll(&mut self) -> Poll<Self::Item, io::Error> {
-    //     let packet = self.inner.recv_chan.next();
-    //     let packet = packet.unwrap();
-    //     Ok(Async::Ready(Box::new(packet))
-    // }
 }
 
 #[cfg(test)]
