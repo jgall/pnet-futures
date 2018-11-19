@@ -1,23 +1,8 @@
-#[macro_use]
 extern crate futures;
-use futures::{stream::Stream, Async, Future, Poll};
-use pnet::datalink::Channel::Ethernet;
-use pnet::datalink::DataLinkReceiver;
-use pnet::datalink::{self, NetworkInterface};
-use pnet::packet::ip::IpNextHeaderProtocols;
-use pnet::packet::ipv4::{Ipv4Packet, MutableIpv4Packet};
-use pnet::packet::udp::MutableUdpPacket;
-use pnet::packet::{MutablePacket, Packet};
+use futures::{stream::Stream, Async, Poll};
+use pnet::packet::ipv4::Ipv4Packet;
 use pnet::transport;
-use pnet::transport::Ipv4TransportChannelNBIterator;
-use pnet::transport::TransportChannelType::Layer4;
-use pnet::transport::TransportProtocol::{Ipv4, Ipv6};
-use pnet::transport::TransportReceiver;
-use pnet::transport::{transport_channel, udp_packet_iter};
-use std::env;
-use std::io::{self, Write};
-use std::net::IpAddr;
-use std::process;
+use std::io;
 
 pub struct TransportStream<'a, T: 'a> {
     //tr: pnet::transport::TransportReceiver,
