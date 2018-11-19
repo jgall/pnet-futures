@@ -6,7 +6,6 @@ edition = "2018"
 
 [dependencies]
 pnet = { git = "https://github.com/jgall/libpnet", branch = "optional_sys_calls" }
-
 futures = "0.1.25"
 tokio-codec = "0.1.1"
 tokio-io = "0.1.10"
