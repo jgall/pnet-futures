@@ -19,6 +19,7 @@ impl<'a> TransportStream<'a> {
 
 // You might ask yourself why this struct is necessary:
 // the libpnet packet struct contains slice references that cannot be safely passed across threads.
+#[derive(Debug)]
 pub struct ToPacket<T> {
     content: Vec<u8>,
     pd: std::marker::PhantomData<T>,
@@ -60,9 +61,9 @@ impl<'a> Stream for TransportStream<'a> {
 mod tests {
     use super::*;
     use pnet::packet::ip::IpNextHeaderProtocols;
+    use pnet::transport::transport_channel;
     use pnet::transport::TransportChannelType::Layer4;
     use pnet::transport::TransportProtocol::Ipv4;
-    use pnet::transport::{transport_channel, udp_packet_nb_iter};
     #[test]
     fn must_run_with_sudo() {
         let protocol = Layer4(Ipv4(IpNextHeaderProtocols::Test1));
@@ -77,6 +78,7 @@ mod tests {
             ),
         };
         let transport_stream = TransportStream::new(&mut rx);
+        transport_stream.map(|(p, a)| println!("oh look we have a packet: {:#?}", p));
         assert_eq!(2 + 2, 4);
     }
 }
