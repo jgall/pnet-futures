@@ -4,17 +4,15 @@ use pnet::packet::ipv4::Ipv4Packet;
 use pnet::transport;
 use std::io;
 
-pub struct TransportStream<'a, T: 'a> {
+pub struct TransportStream<'a> {
     //tr: pnet::transport::TransportReceiver,
-    inner: transport::Ipv4TransportChannelNBIterator,
-    pd: std::marker::PhantomData<&'a T>,
+    inner: transport::Ipv4TransportChannelNBIterator<'a>,
 }
 
-impl<'a, T: 'a> TransportStream<'a, T> {
-    fn new(mut receiver: pnet::transport::TransportReceiver) -> Self {
+impl<'a> TransportStream<'a> {
+    pub fn new(receiver: &'a mut pnet::transport::TransportReceiver) -> Self {
         Self {
             inner: transport::ipv4_packet_nb_iter(receiver),
-            pd: std::marker::PhantomData,
         }
     }
 }
@@ -42,7 +40,7 @@ impl<'a> ToPacket<Ipv4Packet<'a>> {
     }
 }
 
-impl<'a, T: 'a> Stream for TransportStream<'a, T> {
+impl<'a> Stream for TransportStream<'a> {
     type Item = (ToPacket<Ipv4Packet<'a>>, std::net::IpAddr);
     type Error = io::Error;
 
@@ -70,8 +68,25 @@ impl<'a, T: 'a> Stream for TransportStream<'a, T> {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+    use pnet::packet::ip::IpNextHeaderProtocols;
+    use pnet::transport::TransportChannelType::Layer4;
+    use pnet::transport::TransportProtocol::Ipv4;
+    use pnet::transport::{transport_channel, udp_packet_nb_iter};
     #[test]
-    fn it_works() {
+    fn must_run_with_sudo() {
+        let protocol = Layer4(Ipv4(IpNextHeaderProtocols::Test1));
+
+        // Create a new transport channel, dealing with layer 4 packets on a test protocol
+        // It has a receive buffer of 4096 bytes.
+        let (mut tx, mut rx) = match transport_channel(4096, protocol) {
+            Ok((tx, rx)) => (tx, rx),
+            Err(e) => panic!(
+                "An error occurred when creating the transport channel: {}",
+                e
+            ),
+        };
+        let transport_stream = TransportStream::new(&mut rx);
         assert_eq!(2 + 2, 4);
     }
 }
