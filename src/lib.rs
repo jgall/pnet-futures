@@ -44,6 +44,8 @@ pub struct Parts<T> {
     _priv: (),
 }
 
+// You might ask yourself why this struct is necessary:
+// the libpnet packet struct contains slice references that cannot be safely passed across threads.
 pub struct ToPacket<T> {
     content: Vec<u8>,
     pd: std::marker::PhantomData<T>,
