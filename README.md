@@ -16,4 +16,5 @@
             ),
         };
         let transport_stream = TransportStream::new(&mut rx);
-        transport_stream.map(|(p, a)| println!("oh look we have a packet: {:#?}", p));
+        let mapped = transport_stream.map(|(p, a)| println!("oh look we have a packet: {:#?}", p));
+        tokio::run(mapped)
