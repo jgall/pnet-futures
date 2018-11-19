@@ -2,6 +2,8 @@
 
 ## Futures on top of non-blocking libpnet sockets
 
+This library uses my own fork of [libpnet](https://github.com/jgall/libpnet/tree/optional_sys_calls) that supports non-blocking socket io. 
+
 ### Example usage:
 
         let protocol = Layer4(Ipv4(IpNextHeaderProtocols::Test1));
